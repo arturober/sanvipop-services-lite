@@ -1,5 +1,5 @@
-FROM node:current-alpine
-WORKDIR /sanvipop-services
+FROM node:18-alpine
+WORKDIR /sanvipop-services-lite
 COPY package*.json ./
 RUN npm install 
 COPY . .
