@@ -1,7 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as express from 'express';
-import * as admin from 'firebase-admin';
 import { useContainer } from 'class-validator';
 import appConfig from './app.config';
 
