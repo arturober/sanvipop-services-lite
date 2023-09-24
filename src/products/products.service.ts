@@ -42,7 +42,7 @@ export class ProductsService {
   }
 
   findAll(): Promise<Product[]> {
-    return this.productRepository.findAll();
+    return this.productRepository.findAll({populate: ['category']});
   }
 
   findById(id: number): Promise<Product> {
@@ -54,7 +54,10 @@ export class ProductsService {
       'products',
       prodDto.mainPhoto,
     );
-    const category = await this.catRepository.getReference(prodDto.category);
+    const category = await this.catRepository.findOne(prodDto.category);
+    if(!category) {
+      throw new NotFoundException('Category not found');
+    }
     const mainPhoto = new ProductPhoto(photoUrl);
     const product = new Product(
       prodDto.title,
@@ -63,6 +66,7 @@ export class ProductsService {
       category,
       mainPhoto,
     );
+    mainPhoto.product = product;
     await this.productRepository.getEntityManager().persistAndFlush(product);
     return product;
   }

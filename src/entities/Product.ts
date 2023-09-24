@@ -39,9 +39,6 @@ export class Product {
   @Property({ columnType: 'double' })
   price!: number;
 
-  @Property({ fieldName: 'numVisits' })
-  numVisits!: number;
-
   @ManyToOne({
     entity: () => Category,
     fieldName: 'idCategory',

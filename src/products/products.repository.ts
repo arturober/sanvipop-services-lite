@@ -8,7 +8,7 @@ export class ProductsRepository extends EntityRepository<Product> {
         lng = 0, 
         idLogged = 1,
         where: QBFilterQuery<Product> = { $not: { status: 3 } },
-        orderBy: QueryOrderMap<Product> = {'distance': QueryOrder.ASC},
+        orderBy: QueryOrderMap<Product> = {'id': QueryOrder.ASC},
         joins: Map<string, any> = null
     ): Promise<Product[]> {
         let qb = this.em.createQueryBuilder(Product, 'p').select([
