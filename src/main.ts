@@ -17,16 +17,6 @@ async function bootstrap() {
     appConfig().basePath ? appConfig().basePath.slice(0, -1) : '',
   );
 
-  try {
-    // tslint:disable-next-line:no-var-requires
-    const serviceAccount = await require('../firebase/serviceAccountKey.json');
-    admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount),
-      databaseURL: 'https://dwec2019.firebaseio.com',
-    });
-  } catch(e) {}
-
-
   await app.listen(appConfig().port);
 }
 bootstrap();

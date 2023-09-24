@@ -5,7 +5,6 @@ import {
   Injectable,
   NotFoundException
 } from '@nestjs/common';
-import { FirebaseService } from 'src/commons/firebase/firebase.service';
 import { ImageService } from 'src/commons/image/image.service';
 import { Category } from 'src/entities/Category';
 import { Product } from 'src/entities/Product';
@@ -24,7 +23,6 @@ export class ProductsService {
     @InjectRepository(Category)
     private readonly catRepository: EntityRepository<Category>,
     private readonly imageService: ImageService,
-    private readonly firebaseService: FirebaseService,
   ) {}
 
   private async getAndCheckProduct(

@@ -6,7 +6,6 @@ import { ProductsModule } from './products/products.module';
 import { CommonsModule } from './commons/commons.module';
 import { CategoriesModule } from './categories/categories.module';
 import mikroOrmConfig from './mikro-orm.config';
-import { ID_GOOGLE } from './google-id';
 import { ConfigModule } from '@nestjs/config';
 import configuration from './app.config';
 
