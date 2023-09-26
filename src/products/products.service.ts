@@ -40,11 +40,11 @@ export class ProductsService {
   }
 
   findAll(): Promise<Product[]> {
-    return this.productRepository.findAll({populate: ['category']});
+    return this.productRepository.findAll({populate: ['category', 'mainPhoto']});
   }
 
   findById(id: number): Promise<Product> {
-    return this.getAndCheckProduct(id);
+    return this.getAndCheckProduct(id, ['category', 'mainPhoto']);
   }
 
   async insert(prodDto: InsertProductDto): Promise<Product> {
