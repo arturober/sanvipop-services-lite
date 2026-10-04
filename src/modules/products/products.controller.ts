@@ -20,7 +20,7 @@ import { EditProductDto } from './dto/edit-product.dto.js';
 import { AddPhotoDto } from './dto/add-photo.dto.js';
 import { ProductsQueryDto } from './dto/products-query.dto.js';
 import {
-  PaginatedProductsResponseDto,
+  ProductsResponseDto,
   SingleProductResponseDto,
   PhotoUploadResponseDto,
 } from './dto/product-response.dto.js';
@@ -31,15 +31,15 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Get available products with pagination and sorting' })
-  @ApiResponse({ status: 200, description: 'List of products with pagination info' })
+  @ApiOperation({ summary: 'Get all products' })
+  @ApiResponse({ status: 200, description: 'List of all products' })
   async getAllProducts(
     @Query(new ValidationPipe({ transform: true, whitelist: true }))
     query: ProductsQueryDto,
     @Req() req?: Request,
-  ): Promise<PaginatedProductsResponseDto> {
-    const result = await this.productsService.findAll(query);
-    return PaginatedProductsResponseDto.from(result, req);
+  ): Promise<ProductsResponseDto> {
+    const products = await this.productsService.findAll(query);
+    return ProductsResponseDto.from(products, req);
   }
 
   @Get(':id')

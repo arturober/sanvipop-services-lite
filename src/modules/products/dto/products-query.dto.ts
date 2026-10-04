@@ -1,4 +1,4 @@
-import { IsEnum, IsInt, IsOptional, IsPositive, IsString, Min } from 'class-validator';
+import { IsEnum, IsInt, IsOptional, IsPositive, IsString } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export enum ProductSort {
@@ -9,16 +9,6 @@ export enum ProductSort {
 }
 
 export class ProductsQueryDto {
-  /**
-   * Número de página para la paginación (por defecto 1, siempre 12 resultados por página)
-   * @example 1
-   */
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  page?: number = 1;
-
   /**
    * Criterio de ordenación ('date', 'price', 'views'). Por defecto 'date'.
    * @example "date"

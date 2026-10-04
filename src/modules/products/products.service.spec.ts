@@ -31,6 +31,7 @@ describe('ProductsService', () => {
   };
   let productRepoMock: {
     findOne: ReturnType<typeof vi.fn>;
+    find: ReturnType<typeof vi.fn>;
     findAndCount: ReturnType<typeof vi.fn>;
     count: ReturnType<typeof vi.fn>;
     populate: ReturnType<typeof vi.fn>;
@@ -57,6 +58,7 @@ describe('ProductsService', () => {
 
     productRepoMock = {
       findOne: vi.fn(),
+      find: vi.fn().mockResolvedValue([]),
       findAndCount: vi.fn().mockResolvedValue([[], 0]),
       count: vi.fn().mockResolvedValue(0),
       populate: vi.fn().mockImplementation((products) => Promise.resolve(products)),
@@ -107,27 +109,13 @@ describe('ProductsService', () => {
   });
 
   describe('findAll', () => {
-    it('should query general catalog with default page 1 and date sort', async () => {
+    it('should query all products with default date sort', async () => {
       await service.findAll({});
 
-      expect(productRepoMock.findAndCount).toHaveBeenCalledWith(
-        { $not: { status: ProductStatus.SOLD } },
+      expect(productRepoMock.find).toHaveBeenCalledWith(
+        {},
         expect.objectContaining({
-          limit: 12,
-          offset: 0,
           orderBy: { datePublished: QueryOrder.DESC, id: QueryOrder.DESC },
-        }),
-      );
-    });
-
-    it('should paginate correctly with page 2', async () => {
-      await service.findAll({ page: 2 });
-
-      expect(productRepoMock.findAndCount).toHaveBeenCalledWith(
-        { $not: { status: ProductStatus.SOLD } },
-        expect.objectContaining({
-          limit: 12,
-          offset: 12,
         }),
       );
     });
@@ -135,8 +123,8 @@ describe('ProductsService', () => {
     it('should sort by price ASC when sort=price', async () => {
       await service.findAll({ sort: ProductSort.PRICE });
 
-      expect(productRepoMock.findAndCount).toHaveBeenCalledWith(
-        { $not: { status: ProductStatus.SOLD } },
+      expect(productRepoMock.find).toHaveBeenCalledWith(
+        {},
         expect.objectContaining({
           orderBy: { price: QueryOrder.ASC },
         }),
@@ -146,8 +134,8 @@ describe('ProductsService', () => {
     it('should sort by views ASC when sort=views', async () => {
       await service.findAll({ sort: ProductSort.VIEWS });
 
-      expect(productRepoMock.findAndCount).toHaveBeenCalledWith(
-        { $not: { status: ProductStatus.SOLD } },
+      expect(productRepoMock.find).toHaveBeenCalledWith(
+        {},
         expect.objectContaining({
           orderBy: { numVisits: QueryOrder.ASC },
         }),
@@ -157,9 +145,8 @@ describe('ProductsService', () => {
     it('should filter by search in title or description', async () => {
       await service.findAll({ search: 'bici' });
 
-      expect(productRepoMock.findAndCount).toHaveBeenCalledWith(
+      expect(productRepoMock.find).toHaveBeenCalledWith(
         expect.objectContaining({
-          $not: { status: ProductStatus.SOLD },
           $or: [
             { title: { $like: '%bici%' } },
             { description: { $like: '%bici%' } },
@@ -172,9 +159,8 @@ describe('ProductsService', () => {
     it('should filter by category when category id is provided', async () => {
       await service.findAll({ category: 3 });
 
-      expect(productRepoMock.findAndCount).toHaveBeenCalledWith(
+      expect(productRepoMock.find).toHaveBeenCalledWith(
         expect.objectContaining({
-          $not: { status: ProductStatus.SOLD },
           category: 3,
         }),
         expect.any(Object),

@@ -10,7 +10,7 @@ import {
   QueryOrder,
   type QueryOrderMap,
 } from '@mikro-orm/core';
-import { Product, ProductStatus } from './entities/product.entity.js';
+import { Product } from './entities/product.entity.js';
 import { Category } from '../categories/entities/category.entity.js';
 import { ProductPhoto } from './entities/product-photo.entity.js';
 import { ProductsRepository } from './products.repository.js';
@@ -21,7 +21,6 @@ import {
   ProductsQueryDto,
   ProductSort,
 } from './dto/products-query.dto.js';
-import { PaginatedProductsDto } from './dto/product-response.dto.js';
 import { ImageService } from '../../common/services/image/image.service.js';
 
 @Injectable()
@@ -49,15 +48,10 @@ export class ProductsService {
     }
   }
 
-  async findAll(query: ProductsQueryDto = {}): Promise<PaginatedProductsDto> {
-    const page = query.page && query.page > 0 ? query.page : 1;
-    const limit = 12;
-    const offset = (page - 1) * limit;
+  async findAll(query: ProductsQueryDto = {}): Promise<Product[]> {
     const orderBy = this.getOrderMap(query.sort);
 
-    const filter: FilterQuery<Product> = {
-      $not: { status: ProductStatus.SOLD },
-    };
+    const filter: FilterQuery<Product> = {};
 
     if (query.category) {
       filter.category = query.category;
@@ -70,20 +64,10 @@ export class ProductsService {
       ];
     }
 
-    const [products, total_products] =
-      await this.productRepository.findAndCount(filter, {
-        populate: ['category', 'mainPhoto', 'photos'],
-        orderBy,
-        limit,
-        offset,
-      });
-
-    return PaginatedProductsDto.create(
-      products,
-      page,
-      limit,
-      total_products,
-    );
+    return this.productRepository.find(filter, {
+      populate: ['category', 'mainPhoto', 'photos'],
+      orderBy,
+    });
   }
 
   async findById(id: number): Promise<Product> {

@@ -22,12 +22,7 @@ describe('Products Controller', () => {
 
   beforeEach(async () => {
     productsServiceMock = {
-      findAll: vi.fn().mockResolvedValue({
-        products: [],
-        page: 2,
-        total_pages: 1,
-        total_products: 5,
-      }),
+      findAll: vi.fn().mockResolvedValue([]),
       findById: vi.fn().mockResolvedValue({
         id: 1,
         title: 'Product 1',
@@ -90,9 +85,8 @@ describe('Products Controller', () => {
     expect(controller).toBeDefined();
   });
 
-  it('getAllProducts should call productsService.findAll with query and return paginated DTO', async () => {
+  it('getAllProducts should call productsService.findAll with query and return products DTO', async () => {
     const query: ProductsQueryDto = {
-      page: 2,
       sort: ProductSort.PRICE,
       search: 'bici',
     };
@@ -102,9 +96,6 @@ describe('Products Controller', () => {
     expect(productsServiceMock.findAll).toHaveBeenCalledWith(query);
     expect(result).toEqual({
       products: [],
-      page: 2,
-      total_pages: 1,
-      total_products: 5,
     });
   });
 

@@ -158,11 +158,10 @@ Devuelve todas las categorías de productos disponibles en la base de datos.
 
 #### **GET /products**
 
-Devuelve los productos disponibles (`status` no vendido) con paginación fija de 12 elementos por página. Permite filtrar por texto en título o descripción, por categoría y ordenar por fecha, precio o visitas.
+Devuelve la lista completa de productos disponibles en la base de datos. Permite filtrar por texto en título o descripción, por categoría y ordenar por fecha, precio o visitas.
 
 **Parámetros de consulta (Query params, opcionales):**
 
-- `page` (número entero >= 1, opcional, por defecto `1`): Número de página.
 - `search` (cadena, opcional): Término de búsqueda para título o descripción.
 - `category` (número entero >= 1, opcional): Filtrar productos pertenecientes a una categoría específica.
 - `sort` (cadena, opcional): Criterio de ordenación:
@@ -172,11 +171,10 @@ Devuelve los productos disponibles (`status` no vendido) con paginación fija de
 
 *Ejemplos de peticiones:*
 - `GET /products`
-- `GET /products?page=2`
 - `GET /products?search=bici`
 - `GET /products?category=4`
 - `GET /products?sort=price`
-- `GET /products?search=ordenador&category=1&sort=price&page=1`
+- `GET /products?search=ordenador&category=1&sort=price`
 
 **Respuesta exitosa (200 OK):**
 
@@ -203,10 +201,7 @@ Devuelve los productos disponibles (`status` no vendido) con paginación fija de
         }
       ]
     }
-  ],
-  "page": 1,
-  "total_pages": 1,
-  "total_products": 8
+  ]
 }
 ```
 
